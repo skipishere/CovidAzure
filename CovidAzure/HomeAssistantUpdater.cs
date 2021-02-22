@@ -53,7 +53,8 @@ namespace CovidAzure
                 state = value,
                 attributes = new
                 {
-                    friendly_name = $"{key} cases"
+                    friendly_name = $"{key} cases",
+                    unit_of_measurement = "people"
                 }
             };
 
