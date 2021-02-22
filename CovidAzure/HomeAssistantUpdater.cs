@@ -22,7 +22,7 @@ namespace CovidAzure
 
         public async Task Update(string key, object value)
         {
-            var url = $"/api/states/sensor.covid_{key}";
+            var url = $"/api/states/sensor.covid_{key.ToLower().Replace(' ', '_')}";
 
             try
             {
@@ -31,7 +31,7 @@ namespace CovidAzure
                 {
                     var homeEntity = await homeResponse.Content.ReadFromJsonAsync<Entity>();
 
-                    if (homeEntity.Last_changed.Date == DateTime.Today)
+                    if (homeEntity.Last_changed.Date == DateTime.Today && homeEntity.State == value.ToString())
                     {
                         // Already been updated today, so no need to continue.
                         return;
@@ -51,6 +51,10 @@ namespace CovidAzure
             var data = new
             {
                 state = value,
+                attributes = new
+                {
+                    friendly_name = $"{key} cases"
+                }
             };
 
             var response = await HomeClient.PostAsJsonAsync(url, data);

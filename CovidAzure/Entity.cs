@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CovidAzure
 {
@@ -9,5 +7,7 @@ namespace CovidAzure
         public string Entity_id { get; set; }
 
         public DateTime Last_changed { get; set; }
+
+        public string State { get; set; }
     }
 }

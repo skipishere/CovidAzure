@@ -19,7 +19,7 @@ namespace CovidAzure
         private static HttpClient GovClient;
 
         [FunctionName("Function1")]
-        public async static Task Run([TimerTrigger(Schedule)]TimerInfo myTimer, ILogger log)
+        public static void Run([TimerTrigger(Schedule)]TimerInfo myTimer, ILogger log)
         {
             SetupGovClient();
             
@@ -29,8 +29,8 @@ namespace CovidAzure
             var townUrl = @"/v1/data?filters=areaName=peterborough&structure={""date"":""date"",""new"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate""}";
             
             Task.WaitAll(
-                GetData(homeUpdater, "england", englandUrl, log),
-                GetData(homeUpdater, "peterborough", townUrl, log)
+                GetData(homeUpdater, "England", englandUrl, log),
+                GetData(homeUpdater, "Peterborough", townUrl, log)
             );
 
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
@@ -59,11 +59,12 @@ namespace CovidAzure
             {
                 var covid = await response.Content.ReadFromJsonAsync<Covid>();
                 var sevenDayAverage = covid.Data.Take(7).Average(c => c.New);
+                var latest = covid.Data.First();
 
                 Task.WaitAll(
-                    homeAssistantUpdater.Update($"{key}_new", covid.Data.First().New),
-                    homeAssistantUpdater.Update($"{key}_total", covid.Data.First().Total.Value),
-                    homeAssistantUpdater.Update($"{key}_average", sevenDayAverage)
+                    homeAssistantUpdater.Update($"{key} new", latest.New),
+                    homeAssistantUpdater.Update($"{key} total", latest.Total.Value),
+                    homeAssistantUpdater.Update($"{key} average", sevenDayAverage)
                 );
             }
             else
