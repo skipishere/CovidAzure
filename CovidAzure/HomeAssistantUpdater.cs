@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -52,7 +52,8 @@ namespace CovidAzure
                 attributes = new
                 {
                     friendly_name = $"{key} cases",
-                    unit_of_measurement = "people"
+                    unit_of_measurement = "people",
+                    icon = "mdi:virus-outline"
                 }
             };
 
