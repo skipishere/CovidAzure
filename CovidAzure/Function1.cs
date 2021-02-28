@@ -59,7 +59,7 @@ namespace CovidAzure
             if (response.IsSuccessStatusCode)
             {
                 var covid = await response.Content.ReadFromJsonAsync<Covid>();
-                var sevenDayAverage = covid.Data.Take(7).Average(c => c.New);
+                var sevenDayAverage = Math.Round(covid.Data.Take(7).Average(c => c.New), 3);
                 var latest = covid.Data.First();
 
                 Task.WaitAll(
