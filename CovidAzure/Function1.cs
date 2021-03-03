@@ -26,10 +26,12 @@ namespace CovidAzure
             
             var homeUpdater = new HomeAssistantUpdater(log);
 
+            var ukUrl = @"/v1/data?filters=areaType=overview&structure={""date"":""date"",""newCases"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate""}";
             var englandUrl = @"/v1/data?filters=areaType=nation;areaName=england&structure={""date"":""date"",""new"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate""}";
             var townUrl = @"/v1/data?filters=areaName=peterborough&structure={""date"":""date"",""new"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate""}";
             
             Task.WaitAll(
+                GetData(homeUpdater, "UK", ukUrl, log),
                 GetData(homeUpdater, "England", englandUrl, log),
                 GetData(homeUpdater, "Peterborough", townUrl, log)
             );
