@@ -35,7 +35,8 @@ namespace CovidAzure
             Task.WaitAll(
                 GetData(homeUpdater, "UK", ukUrl, log),
                 GetData(homeUpdater, "England", englandUrl, log),
-                GetData(homeUpdater, town, townUrl, log)
+                GetData(homeUpdater, town, townUrl, log),
+                homeUpdater.UpdateLastRun()
             );
 
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");

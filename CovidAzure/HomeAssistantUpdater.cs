@@ -57,6 +57,29 @@ namespace CovidAzure
                 }
             };
 
+            await PostUpdate(url, data);
+        }
+
+        public async Task UpdateLastRun()
+        {
+            var url = $"/api/states/sensor.covid_last_ran";
+
+            var data = new
+            {
+                state = DateTime.UtcNow,
+                attributes = new
+                {
+                    friendly_name = $"Last ran",
+                    unit_of_measurement = "time",
+                    icon = "mdi:virus-outline"
+                }
+            };
+
+            await PostUpdate(url, data);
+        }
+
+        private async Task PostUpdate(string url, object data)
+        {
             var response = await HomeClient.PostAsJsonAsync(url, data);
             
             if (!response.IsSuccessStatusCode)
