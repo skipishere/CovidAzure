@@ -25,15 +25,17 @@ namespace CovidAzure
             SetupGovClient();
             
             var homeUpdater = new HomeAssistantUpdater(log);
+            var town = Environment.GetEnvironmentVariable("Town");
+            const string structure = @"{""date"":""date"",""new"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate""}";
 
-            var ukUrl = @"/v1/data?filters=areaType=overview&structure={""date"":""date"",""newCases"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate""}";
-            var englandUrl = @"/v1/data?filters=areaType=nation;areaName=england&structure={""date"":""date"",""new"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate""}";
-            var townUrl = @"/v1/data?filters=areaName=peterborough&structure={""date"":""date"",""new"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate""}";
+            var ukUrl = $"/v1/data?filters=areaType=overview&structure={structure}";
+            var englandUrl = $"/v1/data?filters=areaType=nation;areaName=england&structure={structure}";
+            var townUrl = $"/v1/data?filters=areaName={town.ToLower()}&structure={structure}";
             
             Task.WaitAll(
                 GetData(homeUpdater, "UK", ukUrl, log),
                 GetData(homeUpdater, "England", englandUrl, log),
-                GetData(homeUpdater, "Peterborough", townUrl, log)
+                GetData(homeUpdater, town, townUrl, log)
             );
 
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
@@ -61,7 +63,7 @@ namespace CovidAzure
             if (response.IsSuccessStatusCode)
             {
                 var covid = await response.Content.ReadFromJsonAsync<Covid>();
-                var sevenDayAverage = Math.Round(covid.Data.Take(7).Average(c => c.New), 3);
+                var sevenDayAverage = Math.Round(covid.Data.Take(7).Average(c => c.New), 1);
                 var latest = covid.Data.First();
 
                 Task.WaitAll(
