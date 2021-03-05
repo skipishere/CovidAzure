@@ -14,7 +14,7 @@ namespace CovidAzure
 #if DEBUG
         private const string Schedule = "0 * * * * *";
 #else
-        private const string Schedule = "0 0 13-18 * * *";
+        private const string Schedule = "0 0 13-20 * * *";
 #endif
 
         private static HttpClient GovClient;
