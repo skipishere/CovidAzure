@@ -22,29 +22,29 @@ namespace CovidAzure
         {
             var url = $"/api/states/sensor.covid_{key.ToLower().Replace(' ', '_')}";
 
-            try
-            {
-                var homeResponse = await HomeClient.GetAsync(url);
-                if (homeResponse.IsSuccessStatusCode)
-                {
-                    var homeEntity = await homeResponse.Content.ReadFromJsonAsync<Entity>();
+            //try
+            //{
+            //    var homeResponse = await HomeClient.GetAsync(url);
+            //    if (homeResponse.IsSuccessStatusCode)
+            //    {
+            //        var homeEntity = await homeResponse.Content.ReadFromJsonAsync<Entity>();
 
-                    if (homeEntity.Last_changed.Date == DateTime.Today && homeEntity.State == value.ToString())
-                    {
-                        // Already been updated today, so no need to continue.
-                        return;
-                    }
-                }
-                else if (homeResponse.StatusCode != System.Net.HttpStatusCode.NotFound)
-                {
-                    _log.LogError("Call failed with bad http status code", url, homeResponse.StatusCode);
-                }
+            //        if (homeEntity.Last_changed.Date == DateTime.Today && homeEntity.State == value.ToString())
+            //        {
+            //            // Already been updated today, so no need to continue.
+            //            return;
+            //        }
+            //    }
+            //    else if (homeResponse.StatusCode != System.Net.HttpStatusCode.NotFound)
+            //    {
+            //        _log.LogError("Call failed with bad http status code", url, homeResponse.StatusCode);
+            //    }
 
-            }
-            catch (Exception ex)
-            {
-                _log.LogError("Call failed with bad http status code", url, ex);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    _log.LogError("Call failed with bad http status code", url, ex);
+            //}
 
             var data = new
             {
