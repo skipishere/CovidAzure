@@ -26,7 +26,7 @@ namespace CovidAzure
             
             var homeUpdater = new HomeAssistantUpdater(log);
             var town = Environment.GetEnvironmentVariable("Town");
-            const string structure = @"{""date"":""date"",""new"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate""}";
+            const string structure = @"{""date"":""date"",""new"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate"",""firstDosePercentage"":""cumVaccinationFirstDoseUptakeByPublishDatePercentage"",""secondDosePercentage"":""cumVaccinationSecondDoseUptakeByPublishDatePercentage""}";
 
             var ukUrl = $"/v1/data?filters=areaType=overview&structure={structure}";
             var englandUrl = $"/v1/data?filters=areaType=nation;areaName=england&structure={structure}";
@@ -66,11 +66,14 @@ namespace CovidAzure
                 var covid = await response.Content.ReadFromJsonAsync<Covid>();
                 var sevenDayAverage = Math.Round(covid.Data.Take(7).Average(c => c.New), 1);
                 var latest = covid.Data.First();
+                var vaccineData = covid.Data.FirstOrDefault(c => c.FirstDosePercentage.HasValue && c.SecondDosePercentage.HasValue);
 
                 Task.WaitAll(
                     homeAssistantUpdater.Update($"{key} new", latest.New),
                     homeAssistantUpdater.Update($"{key} total", latest.Total.Value),
-                    homeAssistantUpdater.Update($"{key} average", sevenDayAverage)
+                    homeAssistantUpdater.Update($"{key} average", sevenDayAverage),
+                    homeAssistantUpdater.UpdateVaccine($"{key} 1st vaccine", vaccineData?.FirstDosePercentage),
+                    homeAssistantUpdater.UpdateVaccine($"{key} 2nd vaccine", vaccineData?.SecondDosePercentage)
                 );
             }
             else

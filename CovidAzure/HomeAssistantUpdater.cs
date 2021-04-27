@@ -10,7 +10,7 @@ namespace CovidAzure
     {
         private static HttpClient HomeClient;
 
-        private ILogger _log;
+        private readonly ILogger _log;
 
         public HomeAssistantUpdater(ILogger log)
         {
@@ -22,30 +22,6 @@ namespace CovidAzure
         {
             var url = $"/api/states/sensor.covid_{key.ToLower().Replace(' ', '_')}";
 
-            //try
-            //{
-            //    var homeResponse = await HomeClient.GetAsync(url);
-            //    if (homeResponse.IsSuccessStatusCode)
-            //    {
-            //        var homeEntity = await homeResponse.Content.ReadFromJsonAsync<Entity>();
-
-            //        if (homeEntity.Last_changed.Date == DateTime.Today && homeEntity.State == value.ToString())
-            //        {
-            //            // Already been updated today, so no need to continue.
-            //            return;
-            //        }
-            //    }
-            //    else if (homeResponse.StatusCode != System.Net.HttpStatusCode.NotFound)
-            //    {
-            //        _log.LogError("Call failed with bad http status code", url, homeResponse.StatusCode);
-            //    }
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    _log.LogError("Call failed with bad http status code", url, ex);
-            //}
-
             var data = new
             {
                 state = value,
@@ -54,6 +30,29 @@ namespace CovidAzure
                     friendly_name = $"{key} cases",
                     unit_of_measurement = "people",
                     icon = "mdi:virus-outline"
+                }
+            };
+
+            await PostUpdate(url, data);
+        }
+
+        public async Task UpdateVaccine(string key, float? value)
+        {
+            if (!value.HasValue)
+            {
+                return;
+            }
+
+            var url = $"/api/states/sensor.covid_{key.ToLower().Replace(' ', '_')}";
+
+            var data = new
+            {
+                state = value,
+                attributes = new
+                {
+                    friendly_name = $"{key} dose",
+                    unit_of_measurement = "%",
+                    icon = "mdi:needle"
                 }
             };
 
