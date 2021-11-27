@@ -26,7 +26,7 @@ namespace CovidAzure
             
             var homeUpdater = new HomeAssistantUpdater(log);
             var town = Environment.GetEnvironmentVariable("Town");
-            const string structure = @"{""date"":""date"",""new"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate"",""firstDosePercentage"":""cumVaccinationFirstDoseUptakeByPublishDatePercentage"",""secondDosePercentage"":""cumVaccinationSecondDoseUptakeByPublishDatePercentage""}";
+            const string structure = @"{""date"":""date"",""new"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate"",""firstDosePercentage"":""cumVaccinationFirstDoseUptakeByPublishDatePercentage"",""secondDosePercentage"":""cumVaccinationSecondDoseUptakeByPublishDatePercentage"",""thirdDosePercentage"":""cumVaccinationThirdInjectionUptakeByPublishDatePercentage""}";
 
             var ukUrl = $"/v1/data?filters=areaType=overview&structure={structure}";
             var englandUrl = $"/v1/data?filters=areaType=nation;areaName=england&structure={structure}";
@@ -73,7 +73,8 @@ namespace CovidAzure
                     homeAssistantUpdater.Update($"{key} total", latest.Total.Value),
                     homeAssistantUpdater.Update($"{key} average", sevenDayAverage),
                     homeAssistantUpdater.UpdateVaccine($"{key} 1st vaccine", vaccineData?.FirstDosePercentage),
-                    homeAssistantUpdater.UpdateVaccine($"{key} 2nd vaccine", vaccineData?.SecondDosePercentage)
+                    homeAssistantUpdater.UpdateVaccine($"{key} 2nd vaccine", vaccineData?.SecondDosePercentage),
+                    homeAssistantUpdater.UpdateVaccine($"{key} 3rd vaccine", vaccineData?.ThirdDosePercentage)
                 );
             }
             else

@@ -19,5 +19,7 @@ namespace CovidAzure
         public float? FirstDosePercentage { get; set; }
 
         public float? SecondDosePercentage { get; set; }
+
+        public float? ThirdDosePercentage { get; set; }
     }
 }
