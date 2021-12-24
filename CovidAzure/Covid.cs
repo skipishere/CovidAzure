@@ -12,7 +12,7 @@ namespace CovidAzure
     {
         public DateTime Date { get; set; }
         
-        public int New { get; set; }
+        public int? New { get; set; }
 
         public int? Total { get; set; }
 

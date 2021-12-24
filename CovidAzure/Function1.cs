@@ -64,7 +64,7 @@ namespace CovidAzure
             if (response.IsSuccessStatusCode)
             {
                 var covid = await response.Content.ReadFromJsonAsync<Covid>();
-                var sevenDayAverage = Math.Round(covid.Data.Take(7).Average(c => c.New), 1);
+                var sevenDayAverage = Math.Round(covid.Data.Take(7).Average(c => c.New.Value), 1);
                 var latest = covid.Data.First();
                 var vaccineData = covid.Data.FirstOrDefault(c => c.FirstDosePercentage.HasValue && c.SecondDosePercentage.HasValue);
 
