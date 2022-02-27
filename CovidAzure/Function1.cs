@@ -14,7 +14,7 @@ namespace CovidAzure
 #if DEBUG
         private const string Schedule = "0 * * * * *";
 #else
-        private const string Schedule = "0 0 16-20 * * *";
+        private const string Schedule = "0 0 16-20 * * 1-5";
 #endif
 
         private static HttpClient GovClient;
@@ -33,8 +33,8 @@ namespace CovidAzure
             var townUrl = $"/v1/data?filters=areaType=ltla;areaName={town.ToLower()}&structure={structure}";
             
             Task.WaitAll(
-                GetData(homeUpdater, "UK", ukUrl, log),
-                GetData(homeUpdater, "England", englandUrl, log),
+                //GetData(homeUpdater, "UK", ukUrl, log),
+                //GetData(homeUpdater, "England", englandUrl, log),
                 GetData(homeUpdater, town, townUrl, log),
                 homeUpdater.UpdateLastRun()
             );
