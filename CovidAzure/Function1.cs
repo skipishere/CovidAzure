@@ -33,8 +33,8 @@ namespace CovidAzure
             var townUrl = $"/v1/data?filters=areaType=ltla;areaName={town.ToLower()}&structure={structure}";
             
             Task.WaitAll(
-                //GetData(homeUpdater, "UK", ukUrl, log),
-                //GetData(homeUpdater, "England", englandUrl, log),
+                GetData(homeUpdater, "UK", ukUrl, log),
+                GetData(homeUpdater, "England", englandUrl, log),
                 GetData(homeUpdater, town, townUrl, log),
                 homeUpdater.UpdateLastRun()
             );
