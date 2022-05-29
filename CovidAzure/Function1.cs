@@ -28,12 +28,10 @@ namespace CovidAzure
             var town = Environment.GetEnvironmentVariable("Town");
             const string structure = @"{""date"":""date"",""new"":""newCasesByPublishDate"",""total"":""cumCasesByPublishDate"",""firstDosePercentage"":""cumVaccinationFirstDoseUptakeByPublishDatePercentage"",""secondDosePercentage"":""cumVaccinationSecondDoseUptakeByPublishDatePercentage"",""thirdDosePercentage"":""cumVaccinationThirdInjectionUptakeByPublishDatePercentage""}";
 
-            var ukUrl = $"/v1/data?filters=areaType=overview&structure={structure}";
             var englandUrl = $"/v1/data?filters=areaType=nation;areaName=england&structure={structure}";
             var townUrl = $"/v1/data?filters=areaType=ltla;areaName={town.ToLower()}&structure={structure}";
             
             Task.WaitAll(
-                GetData(homeUpdater, "UK", ukUrl, log),
                 GetData(homeUpdater, "England", englandUrl, log),
                 GetData(homeUpdater, town, townUrl, log),
                 homeUpdater.UpdateLastRun()
