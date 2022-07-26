@@ -24,10 +24,11 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
+    #- run: dotnet build --configuration Release --output ./output
 
-    - name: 'Resolve Project Dependencies Using Dotnet'
-      shell: pwsh
-      run: |
+    #- name: 'Resolve Project Dependencies Using Dotnet'
+      #shell: pwsh
+    - run: |
         pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
         dotnet build --configuration Release --output ./output
         popd
