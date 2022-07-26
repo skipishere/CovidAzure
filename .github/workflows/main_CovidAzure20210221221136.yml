@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy dotnet core app to Azure Function App - CovidAzure20210221221136
+name: Build and Release CovidAzure Function
 
 on:
   push:
@@ -24,10 +24,6 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-    #- run: dotnet build --configuration Release --output ./output
-
-    #- name: 'Resolve Project Dependencies Using Dotnet'
-      #shell: pwsh
     - run: |
         pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
         dotnet build --configuration Release --output ./output
